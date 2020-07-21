@@ -17,6 +17,11 @@ Use https://cloudcraft.co/.
 
 Work in progress.
 
+GitHub actions is going to be used.
+
+- aws lambda function deploy at master push
+- terraform plan&apply at master push
+
 ## Examples
 
 TODO
