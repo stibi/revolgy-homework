@@ -12,6 +12,7 @@ module "rds" {
   family               = "postgres9.6"
   major_engine_version = "9.6"
   deletion_protection  = false
+  publicly_accessible  = true
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
@@ -21,7 +22,7 @@ module "rds" {
   port     = "5432"
 
   subnet_ids             = module.vpc.public_subnets
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
+  vpc_security_group_ids = [module.vpc.default_security_group_id, "sg-0f6758a31b4e7aa13"]
 
   tags = {
     Project     = "revolgy-homework"
