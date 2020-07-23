@@ -115,3 +115,28 @@ resource "aws_lambda_permission" "allow_apigw" {
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.fortunes.execution_arn}/*"
 }
+
+resource "aws_iam_user" "lambda_gh_deploy" {
+  name = "get-fortune-lambda-gh-deploy"
+  path = "/service/deploy/"
+}
+
+resource "aws_iam_user_policy" "lambda_gh_deploy" {
+  name = "get-fortune-lambda-gh-deploy"
+  user = aws_iam_user.lambda_gh_deploy.name
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "lambda:UpdateFunctionCode"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_lambda_function.get_fortune.arn}"
+    }
+  ]
+}
+EOF
+}
