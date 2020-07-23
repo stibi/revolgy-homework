@@ -69,7 +69,7 @@ resource "aws_lambda_layer_version" "lambda_dependencies" {
 data "archive_file" "get_fortune_package" {
   type        = "zip"
   output_path = "${path.module}/../get_fortune_lambda/lambda_function.zip"
-  
+
   source {
     content  = file("${path.module}/../get_fortune_lambda/lambda_function.py")
     filename = "lambda_function.py"
@@ -98,7 +98,7 @@ resource "aws_lambda_function" "get_fortune" {
   }
 
   layers = [
-      aws_lambda_layer_version.lambda_dependencies.arn
+    aws_lambda_layer_version.lambda_dependencies.arn
   ]
 
   environment {
@@ -113,7 +113,7 @@ resource "aws_lambda_permission" "allow_apigw" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.get_fortune.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.fortunes.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.fortunes.execution_arn}/*"
 }
 
 resource "aws_iam_user" "lambda_gh_deploy" {

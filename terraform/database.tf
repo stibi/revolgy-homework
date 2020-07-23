@@ -4,16 +4,16 @@ module "rds" {
 
   identifier = "revolgy-homework"
 
-  engine               = "postgres"
-  engine_version       = "9.6.9"
-  instance_class       = "db.t2.large"
-  allocated_storage    = 5
-  storage_encrypted    = false
-  family               = "postgres9.6"
-  major_engine_version = "9.6"
-  deletion_protection  = false
-  publicly_accessible  = true
-  iam_database_authentication_enabled  = true
+  engine                              = "postgres"
+  engine_version                      = "9.6.9"
+  instance_class                      = "db.t2.large"
+  allocated_storage                   = 5
+  storage_encrypted                   = false
+  family                              = "postgres9.6"
+  major_engine_version                = "9.6"
+  deletion_protection                 = false
+  publicly_accessible                 = true
+  iam_database_authentication_enabled = true
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
