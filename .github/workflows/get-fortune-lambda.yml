@@ -1,0 +1,32 @@
+name: Deploy get-fortune AWS Lambda
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - 'get_fortune_lambda/*.py'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # this doesn't work, needs to find out more
+        working-directory: get_fortune_lambda
+    steps:
+      - uses: actions/checkout@v2
+  
+      - name: Make deploy ZIP package
+        uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -q -j lambda_function.zip get_fortune_lambda/lambda_function.py get_fortune_lambda/rds-combined-ca-bundle.pem
+  
+      - name: Deploy function
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.LAMBDA_AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.LAMBDA_AWS_SECRET_ACCESS_KEY }}
+          aws_region: eu-west-1
+          function_name: get-fortune
+          zip_file: lambda-function.zip
+  
