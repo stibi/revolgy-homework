@@ -13,6 +13,7 @@ module "rds" {
   major_engine_version = "9.6"
   deletion_protection  = false
   publicly_accessible  = true
+  iam_database_authentication_enabled  = true
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
@@ -31,3 +32,27 @@ module "rds" {
   }
 }
 
+# TODO nasekat variables:
+# - account id
+# - region
+# - db user
+resource "aws_iam_policy" "allow_rds_for_lambda_user" {
+  name = "AllowRdsForLambdaUser"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "rds-db:connect"
+        ],
+        "Effect": "Allow",
+        "Resource": [
+            "arn:aws:rds-db:eu-west-1:909130508899:dbuser:${module.rds.this_db_instance_resource_id}/lambda_user"
+        ]
+      }
+    ]
+  }
+  EOF
+}

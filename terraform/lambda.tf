@@ -27,10 +27,58 @@ resource "aws_iam_role_policy_attachment" "AttachAWSLambdaBasicExecutionRole" {
   policy_arn = data.aws_iam_policy.AWSLambdaBasicExecutionRole.arn
 }
 
+data "aws_iam_policy" "AWSLambdaVPCAccessExecutionRole" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "AttachAWSLambdaVPCAccessExecutionRole" {
+  role       = aws_iam_role.get_fortune_package.name
+  policy_arn = data.aws_iam_policy.AWSLambdaVPCAccessExecutionRole.arn
+}
+
+# Role is allowed to assume itself. Yep.
+# Workaround for IAM auth to RDS. In order to get the connection password token,
+# you have to call RDS client but you have to use temporary assumed credentials. Yep.
+resource "aws_iam_role_policy" "assume_itsel" {
+  name = "RoleCanAssumeItselWorkaroundYolo"
+  role = aws_iam_role.get_fortune_package.id
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "sts:AssumeRole"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:iam::909130508899:role/get-fortune"
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_lambda_layer_version" "lambda_dependencies" {
+  filename   = "${path.module}/../get_fortune_lambda/get_fortune_lambda_libs.zip"
+  layer_name = "get_fortune_lambda_libs"
+
+  compatible_runtimes = ["python3.8"]
+}
+
 data "archive_file" "get_fortune_package" {
   type        = "zip"
-  source_file = "${path.module}/../get_fortune_lambda/lambda_function.py"
   output_path = "${path.module}/../get_fortune_lambda/lambda_function.zip"
+  
+  source {
+    content  = file("${path.module}/../get_fortune_lambda/lambda_function.py")
+    filename = "lambda_function.py"
+  }
+
+  source {
+    content  = file("${path.module}/../get_fortune_lambda/rds-combined-ca-bundle.pem")
+    filename = "rds-combined-ca-bundle.pem"
+  }
 }
 
 resource "aws_lambda_function" "get_fortune" {
@@ -41,10 +89,21 @@ resource "aws_lambda_function" "get_fortune" {
   source_code_hash = data.archive_file.get_fortune_package.output_base64sha256
 
   runtime = "python3.8"
+  timeout = 5
+
+  # private subnets because it needs access to internet / sts assume-role and that's not possible with VPC Lambda & public subnets
+  vpc_config {
+    subnet_ids         = module.vpc.private_subnets
+    security_group_ids = [module.vpc.default_security_group_id]
+  }
+
+  layers = [
+      aws_lambda_layer_version.lambda_dependencies.arn
+  ]
 
   environment {
     variables = {
-      foo = "bar"
+      DB_HOST = module.rds.this_db_instance_address
     }
   }
 }

@@ -2,3 +2,4 @@
 *.tfstate
 *.tfstate.*
 *.zip
+get_fortune_lambda/python
