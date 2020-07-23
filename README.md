@@ -82,5 +82,6 @@ curl -X POST https://dn1yihpqn0.execute-api.eu-west-1.amazonaws.com/prod/fortune
 - CI/CD using GitHub Actions
 - AWS Cognito integration
 - selecting type of a fortune using request parameter
-- tf state on s3
+- :heavy_check_mark: ~tf state on s3~
 - feeding fortunes into the RDS using a fargate task and source files sitting on S3, hope I'll have enough time
+- custom domain for API Gateway
