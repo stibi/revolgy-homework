@@ -49,6 +49,16 @@ Terraform is going to take the file and use it to create the layer.
 
 https://aws.amazon.com/premiumsupport/knowledge-center/lambda-layer-simulated-docker/
 
+## Loading fortunes to DB
+
+There is a bash script `prepare_fortunes.sh` that takes fortune file and makes a SQL file from it, with `INSERT` statement pushing it to the DB.
+
+Then you ran it against the DB host like this:
+
+```
+psql --host=$RDS_HOST --username=$RDS_USER -d fortunky -a -f insert.sql
+```
+
 ## CI/CD
 
 Work in progress.
