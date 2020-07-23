@@ -34,7 +34,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var 'rds_user=${{ secrets.RDS_USER }}' -var 'rds_password=${{ secrets.RDS_PASSWORD }}'
         continue-on-error: true
 
       # On push to $default-branch, build or change infrastructure according to Terraform configuration files
