@@ -1,10 +1,10 @@
 name: 'Terraform'
 
 on:
-    push:
-      branches: [ master ]
-      paths: 
-        - 'terraform/**'
+  push:
+    branches: [ master ]
+    paths: 
+      - 'terraform/**'
 
 jobs:
   terraform:
@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_ACCESS_KEY_ID: "${TF_AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${TF_AWS_SECRET_ACCESS_KEY}"
+      AWS_ACCESS_KEY_ID: $TF_AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $TF_AWS_SECRET_ACCESS_KEY
 
     defaults:
       run:
