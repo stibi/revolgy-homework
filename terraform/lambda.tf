@@ -106,6 +106,10 @@ resource "aws_lambda_function" "get_fortune" {
       DB_HOST = module.rds.this_db_instance_address
     }
   }
+
+  lifecycle {
+    ignore_changes = [last_modified, source_code_hash]
+  }
 }
 
 resource "aws_lambda_permission" "allow_apigw" {

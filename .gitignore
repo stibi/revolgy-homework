@@ -3,3 +3,4 @@
 *.tfstate.*
 *.zip
 get_fortune_lambda/python
+secret.auto.tfvars
