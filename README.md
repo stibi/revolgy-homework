@@ -5,13 +5,7 @@ This app give you a fortune! All you need is a http call to a rest endpoint.
 In return, you get a fortune. It is an [Unix Fortune](https://en.wikipedia.org/wiki/Fortune_(Unix)), no money, sorry, but still a fortune! That counts.
 
 The app is deployed on AWS. There is a postgres db running thanks to RDS. A lambda function query the DB to pick a very random ([guaranteed!](https://xkcd.com/221/)) fortune for you.
-And all of that is glued together with AWS API Gateway, which provider the REST magic you can call. Curl is your friend, see examples.
-
-## Diagram
-
-TODO: a nice diagram describing the app shall be here
-
-Use https://cloudcraft.co/.
+And all of that is glued together with AWS API Gateway, which provides the REST magic you can call. Curl is your friend, see examples.
 
 ## Terraform
 
@@ -80,7 +74,7 @@ curl -X POST https://dn1yihpqn0.execute-api.eu-west-1.amazonaws.com/prod/fortune
 
 - :heavy_check_mark: CI/CD using GitHub Actions
 - :heavy_check_mark: ~tf state on s3~
-- AWS Cognito integration
+- :heavy_check_mark: AWS Cognito integration
 - selecting type of a fortune using request parameter
 - feeding fortunes into the RDS using a fargate task and source files sitting on S3, hope I'll have enough time
 - custom domain for API Gateway
