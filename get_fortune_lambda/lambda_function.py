@@ -81,5 +81,5 @@ def handler(event, context):
 
     return {
         "statusCode": 200,
-        "body": json.dumps(random_fortune)
+        "body": json.dumps(random_fortune, ensure_ascii=False).encode("utf8")
     }
