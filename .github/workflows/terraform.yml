@@ -38,6 +38,6 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Apply
-        id: plan
+        id: apply
         run: terraform apply -auto-approve -no-color -var 'rds_user=${{ secrets.RDS_USER }}' -var 'rds_password=${{ secrets.RDS_PASSWORD }}'
         continue-on-error: true
