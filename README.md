@@ -65,6 +65,9 @@ psql --host=$RDS_HOST --username=$RDS_USER -d fortunky -a -f insert.sql
 
 Get yourself a random fortune:
 
+
+(probably doesn't work at the time, as it is not deployed, sorry)
+
 ```
 curl -X POST https://dn1yihpqn0.execute-api.eu-west-1.amazonaws.com/prod/fortune
 ```
