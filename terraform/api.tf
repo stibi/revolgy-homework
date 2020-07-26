@@ -12,7 +12,8 @@ resource "aws_api_gateway_method" "fortunes" {
   rest_api_id   = aws_api_gateway_rest_api.fortunes.id
   resource_id   = aws_api_gateway_resource.fortunes.id
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.fortunes.id
 }
 
 resource "aws_api_gateway_integration" "get_fortune_lambda" {
@@ -30,4 +31,11 @@ resource "aws_api_gateway_deployment" "fortunes_api_production" {
   stage_name  = "prod"
 
   depends_on = [aws_api_gateway_integration.get_fortune_lambda]
+}
+
+resource "aws_api_gateway_authorizer" "fortunes" {
+  name          = "revolgy-demo"
+  rest_api_id   = aws_api_gateway_rest_api.fortunes.id
+  type          = "COGNITO_USER_POOLS"
+  provider_arns = [aws_cognito_user_pool.revolgy_homework.arn]
 }
