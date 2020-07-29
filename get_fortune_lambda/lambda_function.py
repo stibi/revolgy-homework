@@ -12,6 +12,8 @@ AWS_REGION='eu-west-1'
 DB_NAME='fortunky'
 
 
+# change to trigger ci/cd
+
 def assume_rds_iam_auth_role():
     sts_client = boto3.client('sts')
     assumed_role_object=sts_client.assume_role(
