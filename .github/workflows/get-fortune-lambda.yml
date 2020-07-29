@@ -28,5 +28,5 @@ jobs:
           aws_secret_access_key: ${{ secrets.LAMBDA_AWS_SECRET_ACCESS_KEY }}
           aws_region: eu-west-1
           function_name: get-fortune
-          zip_file: lambda-function.zip
+          zip_file: lambda_function.zip
   
